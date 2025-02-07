@@ -1,6 +1,6 @@
 const rulesets = [
   ['https://raw.githubusercontent.com/littletao08/SiteRules/refs/heads/master/direct.list', 'DIRECT'],
-  ['https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list', 'DIRECT'],
+  ['https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list1', 'DIRECT'],
   ['https://raw.githubusercontent.com/zsokami/ACL4SSR/main/ChinaOnly.list', 'DIRECT'],
   ['https://raw.githubusercontent.com/zsokami/ACL4SSR/main/UnBan1.list', '🛩️ ‍墙内'],
   ['https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list', '🛩️ ‍墙内'],
