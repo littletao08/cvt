@@ -1,4 +1,13 @@
 export const RULES = `rules:
+- DOMAIN-SUFFIX,openai.com,DIRECT
+- DOMAIN-SUFFIX,chatgpt.com,DIRECT
+- DOMAIN-SUFFIX,oaistatic.com,DIRECT
+- DOMAIN-SUFFIX,oaiusercontent.com,DIRECT
+- DOMAIN-SUFFIX,bing.com,DIRECT
+- DOMAIN,copilot.microsoft.com,DIRECT
+- DOMAIN,gemini.google.com,DIRECT
+- DOMAIN-SUFFIX,claude.ai,DIRECT
+- DOMAIN-SUFFIX,anthropic.com,DIRECT
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
 - DOMAIN-SUFFIX,ip6-loopback,DIRECT
