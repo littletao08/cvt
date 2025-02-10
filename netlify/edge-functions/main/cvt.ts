@@ -118,18 +118,27 @@ export async function cvt(
   // console.time('from')
   const proxy_urls = proxy?.split('|') ?? []
   const promises = _from.split('|').map(async (x, i) => {
-    if (/^https?:/i.test(x)) {
+    if (/^(?:https?|data):/i.test(x)) {
       try {
         // console.time('fetch')
         const resp = await fetch(x, {
           headers: { 'user-agent': ua },
-          ...proxy_urls[i] && { client: Deno.createHttpClient({ proxy: { url: proxy_urls[i] } }) },
+          ...proxy_urls[i] && {
+            client: Deno.createHttpClient({
+              proxy: {
+                url: proxy_urls[i].replace(
+                  /^(https?:|socks5h?:)?\/*/i,
+                  (_, $1) => `${$1?.toLowerCase() || 'http:'}//`,
+                ),
+              },
+            }),
+          },
         })
         // console.timeEnd('fetch')
         // console.time('text')
         const text = await resp.text()
         // console.timeEnd('text')
-        if (resp.ok) return [...from(text), resp.headers]
+        if (resp.ok) return [...from(text), /^data:/i.test(x) ? undefined : resp.headers]
         return [[], 0]
       } catch (e) {
         console.error('Fetch Error:', e)
