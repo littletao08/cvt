@@ -2268,6 +2268,8 @@ export const RULES = `rules:
 - DOMAIN-SUFFIX,picjs.xyz,✈️ ‍起飞
 - DOMAIN-SUFFIX,nodeseek.com,✈️ ‍起飞
 - DOMAIN-SUFFIX,hostloc.com,✈️ ‍起飞
+- DOMAIN-SUFFIX,themoviedb.org,✈️ ‍起飞
+- DOMAIN-SUFFIX,thetvdb.com,✈️ ‍起飞
 - DOMAIN-SUFFIX,13th.tech,🛩️ ‍墙内
 - DOMAIN-SUFFIX,423down.com,🛩️ ‍墙内
 - DOMAIN-SUFFIX,bokecc.com,🛩️ ‍墙内
