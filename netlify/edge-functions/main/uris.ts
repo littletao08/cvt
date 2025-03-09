@@ -1,4 +1,5 @@
 import type {
+  AnyTLS,
   Empty,
   GRPCNetwork,
   H2Network,
@@ -7,6 +8,7 @@ import type {
   Hysteria,
   Hysteria2,
   ObfsPlugin,
+  PortOrPorts,
   Proxy,
   ProxyBase,
   Reality,
@@ -50,6 +52,9 @@ const FROM_URI = {
       } catch {
         // pass
       }
+    } else {
+      username = urlDecode(username)
+      password = urlDecode(password)
     }
     return {
       ...baseFrom(u),
@@ -70,6 +75,9 @@ const FROM_URI = {
       } catch {
         // pass
       }
+    } else {
+      username = urlDecode(username)
+      password = urlDecode(password)
     }
     return {
       ...baseFrom(u),
@@ -156,7 +164,7 @@ const FROM_URI = {
       : {}
     return {
       ...baseFrom(u),
-      uuid: u.username,
+      uuid: urlDecode(u.username),
       ...networkFrom(ps),
       ...flow && { flow },
       ...tlsOpts,
@@ -175,7 +183,7 @@ const FROM_URI = {
     const { sni, alpn, fp, pbk, sid } = ps
     return {
       ...baseFrom(u),
-      password: u.username,
+      password: urlDecode(u.username),
       ...netOpts,
       ...sni && { sni },
       ...alpn && { alpn: alpn.split(',') },
@@ -207,8 +215,8 @@ const FROM_URI = {
     const ps = Object.fromEntries(u.searchParams)
     const { alpn } = ps
     return {
-      ...baseFrom(u),
-      password: u.username,
+      ...baseFromForPorts(u),
+      password: urlDecode(u.username),
       ...pickNonEmptyString(ps, 'up', 'down', 'obfs', 'obfs-password', 'sni'),
       ...alpn && { alpn: alpn.split(',') },
       ...scv,
@@ -220,8 +228,8 @@ const FROM_URI = {
     const { alpn, sni, congestion_control } = ps
     return {
       ...baseFrom(u),
-      uuid: u.username,
-      password: u.password,
+      uuid: urlDecode(u.username),
+      password: urlDecode(u.password),
       ...alpn && { alpn: alpn.split(',') },
       ...sni && { sni },
       ...congestion_control && { 'congestion-controller': congestion_control },
@@ -240,6 +248,19 @@ const FROM_URI = {
       ...reserved && { reserved: reserved.split(',').map(Number) },
       ...ips,
       ...mtu && { mtu: +mtu },
+      ...udp,
+    }
+  },
+  anytls(uri: string): AnyTLS {
+    const u = new URL(uri)
+    const ps = Object.fromEntries(u.searchParams)
+    const { alpn } = ps
+    return {
+      ...baseFrom(u),
+      password: urlDecode(u.username),
+      ...pickNonEmptyString(ps, 'sni'),
+      ...alpn && { alpn: alpn.split(',') },
+      ...scv,
       ...udp,
     }
   },
@@ -363,10 +384,11 @@ const TO_URI = {
   },
   hysteria2(proxy: Proxy): string {
     checkType(proxy, 'hysteria2')
-    const { password, up, down, alpn } = proxy
+    const { ports, password, up, down, alpn } = proxy
     const u = baseTo(proxy)
     u.username = password
     u.search = new URLSearchParams({
+      ...ports && { mport: ports },
       ...up && { up: toMbps(up) },
       ...down && { down: toMbps(down) },
       ...pickNonEmptyString(proxy, 'obfs', 'obfs-password', 'sni'),
@@ -400,6 +422,17 @@ const TO_URI = {
     }).toString()
     return u.href
   },
+  anytls(proxy: Proxy): string {
+    checkType(proxy, 'anytls')
+    const { password, alpn } = proxy
+    const u = baseTo(proxy)
+    u.username = password
+    u.search = new URLSearchParams({
+      ...pickNonEmptyString(proxy, 'sni'),
+      ...alpn?.length && { alpn: alpn.join(',') },
+    }).toString()
+    return u.href
+  },
 }
 
 function checkType<T extends Proxy['type']>(proxy: Proxy, type: T): asserts proxy is Proxy & { type: T } {
@@ -416,9 +449,28 @@ function baseFrom<T extends Proxy['type']>(u: URL): ProxyBase & { port: number; 
   }
 }
 
+function baseFromForPorts<T extends Proxy['type']>(u: URL): ProxyBase & PortOrPorts & { type: T } {
+  const { protocol, hostname, port, host, hash } = u
+  const mport = u.searchParams.get('mport')
+  const ports = {
+    ...port && { port: +port },
+    ...mport && { ports: mport },
+  }
+  if (!('port' in ports || 'ports' in ports)) {
+    ports.port = protocol === 'http:' ? 80 : 443
+  }
+  return {
+    name: u.searchParams.get('remarks') || hash && urlDecodePlus(hash.substring(1)) || host,
+    server: hostname[0] === '[' ? hostname.slice(1, -1) : hostname,
+    ...ports as PortOrPorts,
+    type: TYPE_MAP[protocol.slice(0, -1)] as T,
+  }
+}
+
 function baseTo(p: ProxyBase & Pick<Proxy, 'type'> & { port?: number }): URL {
   const { name, type, server, port } = p
-  const u = new URL(`${type}://${server.includes(':') ? `[${server}]` : server}:${port || 443}`)
+  const u = new URL(`${type}://${server.includes(':') ? `[${server}]` : server}`)
+  if (port) u.port = String(port)
   u.hash = name.replaceAll('%', '%25')
   return u
 }
@@ -618,6 +670,7 @@ const TYPE_MAP: Record<
   | 'hysteria2'
   | 'tuic'
   | 'wireguard'
+  | 'anytls'
   | undefined
 > = Object.assign(Object.create(null), {
   http: 'http',
@@ -637,6 +690,7 @@ const TYPE_MAP: Record<
   tuic: 'tuic',
   wireguard: 'wireguard',
   wg: 'wireguard',
+  anytls: 'anytls',
 })
 
 export function fromURI(uri: string): Proxy {
