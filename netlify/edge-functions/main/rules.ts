@@ -1,4 +1,7 @@
 export const RULES = `rules:
+- DOMAIN-SUFFIX,ptcafe.club,DIRECT
+- DOMAIN-SUFFIX,ip.sb,DIRECT
+- DOMAIN-SUFFIX,m-team.cc,DIRECT
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
 - DOMAIN-SUFFIX,ip6-loopback,DIRECT
@@ -8468,6 +8471,12 @@ export const RULES = `rules:
 - DOMAIN-SUFFIX,ocnttv.com,✈️ ‍起飞
 - DOMAIN-SUFFIX,vikacg.com,✈️ ‍起飞
 - DOMAIN-SUFFIX,picjs.xyz,✈️ ‍起飞
+- DOMAIN-SUFFIX,nodeseek.com,✈️ ‍起飞
+- DOMAIN-SUFFIX,hostloc.com,✈️ ‍起飞
+- DOMAIN-SUFFIX,themoviedb.org,✈️ ‍起飞
+- DOMAIN-SUFFIX,thetvdb.com,✈️ ‍起飞
+- DOMAIN-SUFFIX,metacubex.one,✈️ ‍起飞
+- DOMAIN-SUFFIX,pages.dev,✈️ ‍起飞
 - DOMAIN-SUFFIX,13th.tech,🛩️ ‍墙内
 - DOMAIN-SUFFIX,423down.com,🛩️ ‍墙内
 - DOMAIN-SUFFIX,bokecc.com,🛩️ ‍墙内
