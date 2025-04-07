@@ -654,7 +654,7 @@ function genProxyGroups(proxies: Proxy[]) {
     ],
     type: 'select',
   })
-  groups.push({ name: '🌐 ‍未知站点', proxies: ['✈️ ‍起飞', '🛩️ ‍墙内', '💩 ‍广告'], type: 'select' })
+  groups.push({ name: '🌐 ‍未知站点', proxies: ['🛩️ ‍墙内', '✈️ ‍起飞', '💩 ‍广告'], type: 'select' })
   for (const [k, v] of entries) {
     groups.push({
       name: k,
