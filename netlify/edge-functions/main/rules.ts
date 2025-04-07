@@ -2,6 +2,7 @@ export const RULES = `rules:
 - DOMAIN-SUFFIX,ptcafe.club,DIRECT
 - DOMAIN-SUFFIX,ip.sb,DIRECT
 - DOMAIN-SUFFIX,m-team.cc,DIRECT
+- DOMAIN-SUFFIX,pvpv.bid,DIRECT
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
 - DOMAIN-SUFFIX,ip6-loopback,DIRECT
