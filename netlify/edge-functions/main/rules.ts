@@ -655,6 +655,7 @@ export const RULES = `rules:
 - DOMAIN-SUFFIX,pages.dev,✈️ ‍起飞
 - DOMAIN-SUFFIX,pvpv.bid,✈️ ‍起飞
 - DOMAIN-SUFFIX,cloudflare.com,✈️ ‍起飞
+- GEOSITE,category-dev,✈️ ‍起飞
 - DOMAIN-SUFFIX,13th.tech,🛩️ ‍墙内
 - DOMAIN-SUFFIX,423down.com,🛩️ ‍墙内
 - DOMAIN-SUFFIX,bokecc.com,🛩️ ‍墙内
